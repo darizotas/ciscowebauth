@@ -12,6 +12,7 @@ from wlanapi.wlanconninfo import *
 from webauth.CiscoWebAuth import *
 import sys
 import argparse
+import ssl
 
 class CiscoWebAuthManager:
     """Class responsible for loging-in/out from wireless networks managed by Cisco Web Authentication.
@@ -53,7 +54,9 @@ class CiscoWebAuthManager:
     def login(self, host, username, password):
         """Logs in to the wireless network"""
         
-        connection = httplib.HTTPSConnection(host)
+        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        context.verify_mode = ssl.CERT_NONE
+        connection = httplib.HTTPSConnection(host, context=context)
         url = "/login.html"
         params = urllib.urlencode({\
             'buttonClicked': 4, \
