@@ -90,7 +90,9 @@ class CiscoWebAuthManager:
 
     def logout(self, host):
         """Logs out from the wireless network"""
-        connection = httplib.HTTPSConnection(host)
+        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        context.verify_mode = ssl.CERT_NONE
+        connection = httplib.HTTPSConnection(host, context=context)
         url = "/logout.html"
         params = urllib.urlencode({\
 #            'Logout': 'Logout', \
